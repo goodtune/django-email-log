@@ -24,7 +24,11 @@ class EmailBackend(BaseEmailBackend):
                 body=message.body,
             )
             message.connection = self.connection
-            num_sent += message.send()
+            sent = message.send()
+            try:
+                num_sent += sent
+            except TypeError:
+                num_sent += len(sent)
             if num_sent > 0:
                 email.ok = True
                 email.save()
